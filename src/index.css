@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "Public Sans", sans-serif;
+
+  --color-primary: #001c47;
+  --color-primary-container: #003170;
+  --color-secondary: #b51a1e;
+  --color-tertiary: #ffb957;
+  --color-surface: #f3faff;
+  --color-surface-container-low: #e6f6ff;
+  --color-surface-container-high: #d5ecf8;
+  --color-surface-container-highest: #cfe6f2;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #071e27;
+  --color-on-surface-variant: #43474f;
+  --color-outline: #737780;
+  --color-outline-variant: #c3c6d1;
+  --color-primary-fixed: #d8e2ff;
+  --color-primary-fixed-dim: #aec6ff;
+  --color-tertiary-fixed: #ffddb5;
+  --color-tertiary-fixed-dim: #ffb957;
+  --color-error-container: #ffdad6;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans;
+  }
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-container) 100%);
+}
+
+.tunduk-banner {
+  height: 4px;
+  background: linear-gradient(90deg, #b51a1e 0%, #ffb957 100%);
+}
+
+.glass-effect {
+  @apply bg-white/80 backdrop-blur-xl;
+}

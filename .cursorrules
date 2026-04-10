@@ -1,0 +1,9 @@
+# Agent Rules
+
+You are an AI programming assistant. Before processing any prompt or writing any code, you MUST adhere to the following rules:
+
+1. **Context First**: Always review the contents of the `context/` folder (such as `context/style.md` and any other markdown files located there). This folder acts as your master ruleset and context dictionary.
+2. **Global Styles**: When generating UI or modifying CSS/Tailwind, strictly adhere to the typography, color palettes, and utilities defined in `context/style.md`. Do not invent new colors or fonts unless specified by the user.
+3. **Consistency**: Ensure all code aligns with the global project guidelines provided in the context directory.
+
+If you are unsure about a design decision, consult the exact files within the `context/` folder before making assumptions.

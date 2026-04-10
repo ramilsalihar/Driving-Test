@@ -1,36 +1,49 @@
 import { useState } from 'react';
-import { 
-  Search, 
-  TrafficCone, 
-  Gavel, 
-  PlusSquare, 
-  Wrench, 
-  Brain, 
-  Home, 
-  BookOpen, 
-  Calendar, 
-  User, 
-  ArrowLeft, 
-  ArrowRight, 
-  Flag, 
-  Timer, 
+import {
+  Search,
+  TrafficCone,
+  Gavel,
+  PlusSquare,
+  Wrench,
+  Brain,
+  Home,
+  BookOpen,
+  Calendar,
+  User,
+  ArrowLeft,
+  ArrowRight,
+  Flag,
+  Timer,
   CheckCircle2,
   Menu,
   Landmark,
-  ShieldCheck
+  ShieldCheck,
+  ChevronRight,
+  TrendingUp,
+  Award,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-type Screen = 'study' | 'exam';
+type Screen = 'home' | 'study' | 'exam';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('study');
+  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
 
   return (
     <div className="min-h-screen flex flex-col">
       <AnimatePresence mode="wait">
-        {currentScreen === 'study' ? (
-          <StudyModules key="study" onStartExam={() => setCurrentScreen('exam')} />
+        {currentScreen === 'home' ? (
+          <HomePage
+            key="home"
+            onGoStudy={() => setCurrentScreen('study')}
+            onGoExam={() => setCurrentScreen('exam')}
+          />
+        ) : currentScreen === 'study' ? (
+          <StudyModules
+            key="study"
+            onStartExam={() => setCurrentScreen('exam')}
+            onGoHome={() => setCurrentScreen('home')}
+          />
         ) : (
           <ExamMode key="exam" onExit={() => setCurrentScreen('study')} />
         )}
@@ -39,7 +52,148 @@ export default function App() {
   );
 }
 
-function StudyModules({ onStartExam }: { onStartExam: () => void; key?: string }) {
+function HomePage({
+  onGoStudy,
+  onGoExam,
+}: {
+  onGoStudy: () => void;
+  onGoExam: () => void;
+  key?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex-1 flex flex-col pb-24 md:pb-0"
+    >
+      {/* Header */}
+      <header className="bg-primary text-white sticky top-0 z-50 shadow-lg">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Landmark className="w-6 h-6" />
+            <h1 className="font-bold tracking-tighter uppercase text-lg">КЫРГЫЗ РЕСПУБЛИКАСЫ</h1>
+          </div>
+          <button className="md:hidden p-2 hover:bg-white/10 rounded-full transition-colors">
+            <Menu className="w-6 h-6" />
+          </button>
+          <nav className="hidden md:flex items-center gap-8 font-medium">
+            <a href="#" className="text-white border-b-2 border-white pb-1">Home</a>
+            <button onClick={onGoStudy} className="text-white/60 hover:text-white transition-colors">Study</button>
+            <a href="#" className="text-white/60 hover:text-white transition-colors">Bookings</a>
+            <a href="#" className="text-white/60 hover:text-white transition-colors">Profile</a>
+          </nav>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto w-full px-6 pt-8 pb-12 space-y-10">
+        {/* Hero */}
+        <div className="relative rounded-2xl overflow-hidden bg-primary text-white p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 z-10">
+            <p className="text-sm font-label uppercase tracking-widest text-white/60">Добро пожаловать / Welcome back</p>
+            <h2 className="text-4xl font-extrabold tracking-tight">Ready to study<br />for your exam?</h2>
+            <p className="text-white/70 font-label max-w-sm">
+              Continue where you left off or start a new topic. Your exam is closer than you think.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button
+                onClick={onGoStudy}
+                className="flex items-center gap-2 bg-white text-primary font-bold px-6 py-3 rounded-xl shadow active:scale-95 transition-all"
+              >
+                <BookOpen className="w-5 h-5" />
+                Continue Studying
+              </button>
+              <button
+                onClick={onGoExam}
+                className="flex items-center gap-2 bg-white/10 border border-white/20 text-white font-bold px-6 py-3 rounded-xl active:scale-95 transition-all"
+              >
+                <ShieldCheck className="w-5 h-5" />
+                Mock Exam
+              </button>
+            </div>
+          </div>
+          <div className="hidden md:block z-10">
+            <div className="w-40 h-40 rounded-full bg-white/10 flex items-center justify-center">
+              <Landmark className="w-20 h-20 text-white/40" />
+            </div>
+          </div>
+          <div className="absolute -right-16 -top-16 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { icon: <TrendingUp className="w-5 h-5 text-primary" />, label: 'Overall Progress', value: '61%' },
+            { icon: <CheckCircle2 className="w-5 h-5 text-tertiary" />, label: 'Topics Completed', value: '1 / 5' },
+            { icon: <Award className="w-5 h-5 text-secondary" />, label: 'Best Mock Score', value: '17 / 20' },
+            { icon: <Timer className="w-5 h-5 text-primary" />, label: 'Study Streak', value: '4 days' },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col gap-3">
+              <div className="p-2 bg-surface-container-low rounded-lg w-fit">{stat.icon}</div>
+              <div>
+                <p className="text-2xl font-extrabold text-primary">{stat.value}</p>
+                <p className="text-xs font-label text-outline mt-0.5">{stat.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Quick Access */}
+        <div>
+          <h3 className="text-lg font-bold text-primary mb-4">Quick Access</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { icon: <TrafficCone className="w-6 h-6 text-primary" />, title: 'Road Signs & Markings', sub: '150 questions · 75% done', progress: 75 },
+              { icon: <Gavel className="w-6 h-6 text-secondary" />, title: 'Rules of the Road', sub: '120 questions · 42% done', progress: 42 },
+              { icon: <PlusSquare className="w-6 h-6 text-secondary" />, title: 'First Aid', sub: '40 questions · 20% done', progress: 20 },
+              { icon: <Wrench className="w-6 h-6 text-primary" />, title: 'Vehicle Mechanics', sub: '12 topics · 90% done', progress: 90 },
+            ].map((item) => (
+              <button
+                key={item.title}
+                onClick={onGoStudy}
+                className="flex items-center gap-4 bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow text-left group"
+              >
+                <div className="p-3 bg-surface-container-low rounded-xl shrink-0">{item.icon}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-primary truncate">{item.title}</p>
+                  <p className="text-xs font-label text-outline mt-0.5">{item.sub}</p>
+                  <div className="mt-2 w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full rounded-full" style={{ width: `${item.progress}%` }} />
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-outline group-hover:text-primary transition-colors shrink-0" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Bottom Nav (Mobile) */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full glass-effect border-t border-outline-variant/20 px-4 pt-2 pb-6 flex justify-around items-center z-50">
+        <button className="flex flex-col items-center gap-1 p-2 text-primary">
+          <div className="bg-primary/10 p-2 rounded-xl">
+            <Home className="w-6 h-6" />
+          </div>
+          <span className="text-[10px] font-bold font-label">Home</span>
+        </button>
+        <button onClick={onGoStudy} className="flex flex-col items-center gap-1 p-2 text-outline">
+          <BookOpen className="w-6 h-6" />
+          <span className="text-[10px] font-medium font-label">Study</span>
+        </button>
+        <button className="flex flex-col items-center gap-1 p-2 text-outline">
+          <Calendar className="w-6 h-6" />
+          <span className="text-[10px] font-medium font-label">Bookings</span>
+        </button>
+        <button className="flex flex-col items-center gap-1 p-2 text-outline">
+          <User className="w-6 h-6" />
+          <span className="text-[10px] font-medium font-label">Profile</span>
+        </button>
+      </nav>
+    </motion.div>
+  );
+}
+
+function StudyModules({ onStartExam, onGoHome }: { onStartExam: () => void; onGoHome: () => void; key?: string }) {
   return (
     <motion.div 
       initial={{ opacity: 0 }} 
@@ -58,7 +212,7 @@ function StudyModules({ onStartExam }: { onStartExam: () => void; key?: string }
             <Menu className="w-6 h-6" />
           </button>
           <nav className="hidden md:flex items-center gap-8 font-medium">
-            <a href="#" className="text-white/60 hover:text-white transition-colors">Home</a>
+            <button onClick={onGoHome} className="text-white/60 hover:text-white transition-colors">Home</button>
             <a href="#" className="text-white border-b-2 border-white pb-1">Study</a>
             <a href="#" className="text-white/60 hover:text-white transition-colors">Bookings</a>
             <a href="#" className="text-white/60 hover:text-white transition-colors">Profile</a>
@@ -212,7 +366,7 @@ function StudyModules({ onStartExam }: { onStartExam: () => void; key?: string }
 
       {/* Bottom Nav (Mobile) */}
       <nav className="md:hidden fixed bottom-0 left-0 w-full glass-effect border-t border-outline-variant/20 px-4 pt-2 pb-6 flex justify-around items-center z-50">
-        <button className="flex flex-col items-center gap-1 p-2 text-outline">
+        <button onClick={onGoHome} className="flex flex-col items-center gap-1 p-2 text-outline">
           <Home className="w-6 h-6" />
           <span className="text-[10px] font-medium font-label">Home</span>
         </button>
